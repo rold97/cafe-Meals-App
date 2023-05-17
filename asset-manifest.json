@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/cafe-Meals-App/static/css/main.67a784e6.css",
+    "main.js": "/cafe-Meals-App/static/js/main.ea3b98b1.js",
+    "static/media/cafeImage.jpg": "/cafe-Meals-App/static/media/cafeImage.9182df57a363803a756f.jpg",
+    "index.html": "/cafe-Meals-App/index.html",
+    "main.67a784e6.css.map": "/cafe-Meals-App/static/css/main.67a784e6.css.map",
+    "main.ea3b98b1.js.map": "/cafe-Meals-App/static/js/main.ea3b98b1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.67a784e6.css",
+    "static/js/main.ea3b98b1.js"
+  ]
+}
