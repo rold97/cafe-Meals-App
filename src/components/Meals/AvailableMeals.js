@@ -1,60 +1,62 @@
 import Card from "../UI/Card";
 import classes from "./AvailableMeals.module.css";
 import MealItem from "./MealItem/MealItem";
-
-const DUMMY_MEALS = [
-  {
-    id: "m1",
-    name: "Croissant",
-    description: "Classic croissant with tasty jam",
-    price: 73,
-  },
-  {
-    id: "m2",
-    name: "Classic cottage cheese pancakes",
-    description: "served with yogurt and apricot jam",
-    price: 125,
-  },
-  {
-    id: "m3",
-    name: "Coconut milk oatmeal",
-    description: "with banana and almonds",
-    price: 117,
-  },
-  {
-    id: "m4",
-    name: "Omlette with fried tomato",
-    description: "Healthy...and green...",
-    price: 95,
-  },
-  {
-    id: "m5",
-    name: "Espresso/Ristretto",
-    description: "",
-    price: 40,
-  },
-  {
-    id: "m6",
-    name: "Americano",
-    description: "",
-    price: 45,
-  },
-  {
-    id: "m7",
-    name: "Capuccino",
-    description: "",
-    price: 60,
-  },
-  {
-    id: "m8",
-    name: "Latte",
-    description: "",
-    price: 60,
-  },
-];
+import { useEffect, useState } from "react";
 
 const AvailableMeals = (props) => {
-  const menuList = DUMMY_MEALS.map((meal) => (
+  const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState();
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      const response = await fetch(
+        "https://cafeorders-422fb-default-rtdb.europe-west1.firebasedatabase.app/menu/meals.json"
+      );
+
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const responseData = await response.json();
+      const loadMeals = [];
+
+      for (const key in responseData) {
+        loadMeals.push({
+          id: key,
+          name: responseData[key].name,
+          description: responseData[key].description,
+          price: responseData[key].price,
+        });
+      }
+
+      setMeals(loadMeals);
+      setIsLoading(false);
+    };
+
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section className={classes.MealsLoading}>
+        <p>Loading...</p>
+      </section>
+    );
+  }
+
+  if (httpError) {
+    return (
+      <section className={classes.MealsError}>
+        <p>{httpError.message}</p>
+      </section>
+    );
+  }
+
+  const mealsList = meals.map((meal) => (
     <MealItem
       key={meal.id}
       id={meal.id}
@@ -67,7 +69,7 @@ const AvailableMeals = (props) => {
   return (
     <section className={classes.meals}>
       <Card>
-        <ul>{menuList}</ul>
+        <ul>{mealsList}</ul>
       </Card>
     </section>
   );
